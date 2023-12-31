@@ -1,0 +1,18 @@
+Millions _____[ADP][of] Americans cannot afford to buy enough food.
+That_____[VERB][’s] according to a recent report by the United States Department of Agriculture (USDA).
+It _____[VERB][found] that the number of households facing food insecurity jumped to 17 million in 2022, from 13.5 million in 2020.
+
+Experts _____[VERB][say] there are two causes for the increase: a rise in food costs and the end of government programs that help low-income families.
+_____[DET][These] programs were put in place during the pandemic, when many people lost their jobs.
+But Congress has since _____[VERB][let] many of these programs expire.
+
+“_____[DET][The] unwinding of the pandemic interventions and the rising costs of food [have] taken hold,” says Geri Henchy of the Food Research & Action Center.
+“It_____[VERB][’s] like a horrible storm for families.”
+
+One policy that _____[VERB][ended] is free lunch for all students.
+It not _____[ADV][only] provided meals, Henchy says.
+“It was _____[ADJ][huge] for people’s budgets.”
+
+Tom Vilsak, head _____[ADP][of] the USDA, has urged Congress to extend programs such as Women, Infants, and Children, which helps women and young children who might not have enough to eat.
+“We can _____[VERB][make] a positive impact on food security,” Vilsak says.
+“_____[DET][No] child should go hungry in America.”
