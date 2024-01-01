@@ -1,4 +1,6 @@
+import re
 import sys
+import random
 import spacy
 
 
@@ -31,26 +33,41 @@ def replace(content):
 
     nlp = spacy.load("en_core_web_sm")
 
-    print(content)
+    # each iteration of file.readlines is a paragraph
     for paragraph in content:
-        
-        doc = nlp(paragraph)
+            
+            # call natural language processing object on str of text
+            doc = nlp(paragraph)
 
-        for sent in doc.sents:
-            text = sent.text.replace("\n", "")
+            
+            for sent in doc.sents:
+                # remove newlines from the end of sentence 
+                text = sent.text.replace("\n", "")
 
-            for token in sent:
-                if token.pos_ in ['VERB', 'ADJ', "ADP", "DET", "ADV"]:
-                #if token.pos_ not in ['INTJ', 'NOUN', 'NUM', 'PUNCT', 'SYM', 'PROPN']:
-                    replacement = token
-                    break
+                # randomise words in a sent for even distribution of blanks 
+                randomized_sent = random.sample(list(sent), len(sent))
+                
 
-            modified_sent = text.replace(replacement.text,f'_____[{replacement.pos_}][{replacement.text}]' )
-            modified_sents.append(modified_sent)
+                for token in randomized_sent:
+                    if token.pos_ in ['VERB', 'ADJ', "ADP", "DET", "ADV"]:
+                    #if token.pos_ not in ['INTJ', 'NOUN', 'NUM', 'PUNCT', 'SYM', 'PROPN']:
+                        answer = token
+                        break
+                        
+                blank = '_' * (len(answer) + 5)
+                replacement = f'{blank}[{answer.pos_}][{answer.text}]'
 
 
-        with open('output.txt', 'w') as file:
-            file.write('\n'.join(modified_sents))
+                # find the answer in text and replace it with replacement 
+                # do this only for the first occurrence to avoid repetition
+                modified_sent = re.sub(r'\b' + answer.text +  r'\b', replacement, text, count=1)
+                        
+    
+                modified_sents.append(modified_sent)
+
+
+            with open('output.txt', 'w') as file:
+                file.write('\n'.join(modified_sents))
 
 
 
