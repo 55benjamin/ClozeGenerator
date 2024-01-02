@@ -10,6 +10,8 @@ from pdfminer.high_level import extract_text
 
 
 def main():
+
+
     filename = input("Please input filename with its extension (.txt):")
 
     content = get_content(filename)
