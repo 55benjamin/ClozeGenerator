@@ -6,6 +6,8 @@ import curses
 import docx2txt
 from os.path import splitext
 from pdfminer.high_level import extract_text
+from docx import Document
+from docx.shared import Pt
 
 
 
@@ -35,7 +37,7 @@ def main(stdscr):
     stdscr.refresh()
     
     # write to the question and answer files 
-    generate(content)
+    generate_to_docx(content)
 
     stdscr.clear()
     success_msg = "Cloze passage generated! Press enter to exit."
@@ -209,11 +211,7 @@ def replace(content):
         # randomise words in a sent for even distribution of blanks 
         randomized_sent = random.sample(list(sent), len(sent))
 
-        
-        
         for token in randomized_sent:
-            
-            
             if token.pos_ not in ['INTJ', 'NOUN', 'NUM', 'PUNCT', 'SYM', 'PROPN', 'X', 'SPACE']:
 
                 # don't test students on contractions as they are too simplistic
@@ -251,6 +249,30 @@ def generate(content):
     with open('question.txt', 'w') as file:
         file.write('[QUESTION SHEET]\n')
         file.write('\n'.join(question_sents))
+
+def generate_to_docx(content):
+    question_sents, answer_sents = replace(content)
+
+    # Create quesiton and answer Document objects
+    questions = Document()
+    answers = Document()
+
+
+    # add a new paragraph to each of the documents 
+    questions_paragraph = questions.add_paragraph('\n'.join(question_sents))
+    answers_paragraph = answers.add_paragraph(('\n'.join(answer_sents)))
+
+    # set double line spacing 
+    questions_paragraph.paragraph_format.line_spacing = 2.0  
+    answers_paragraph.paragraph_format.line_spacing = 2.0  
+
+    # save the documents 
+    questions.save('questions.docx')
+    answers.save('answers.docx')
+
+
+
+
         
 # shows error message(red) on stdscr 
 def show_error(stdscr,error_msg):

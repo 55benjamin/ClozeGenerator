@@ -6,6 +6,13 @@
 - [ ] Support for Microsoft Word & PDFs (output text)
 - [X] Consider handling ValueError in stdscr
 - [X] Separate question sheet and answer sheet
+- [ ] Attribution for curser and pdf references 
+
+
+## TODO FOR MICROSOFT WORD OUTPUT SUPPORT
+- [ ] Add option to export via txt/docx in stdscr
+- [ ] Join all sentences into one paragraph instead of separate lines
+- [ ] Add titles for question and answer sheet 
 
 ## CS50P Final Project Requirements 
 - [X] Implemented in python, in a project.py file
