@@ -7,7 +7,6 @@
 - [ ] Consider animated text/progress bar for status
 - [ ] Consider handling ValueError in stdscr
 - [ ] Separate question sheet and answer sheet
-- [ ] Find out if you can open a file directly with a command
 - [ ] Adjust frequency of blanks
 - [ ] Choose word types
 
