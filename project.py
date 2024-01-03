@@ -19,8 +19,6 @@ def main(stdscr):
             break
 
         except ValueError:
-            curses.start_color()
-
             error_msg = 'File not found. Please try entering a different name and ensure the extension is correct.'
 
             show_error(stdscr,error_msg)
@@ -37,29 +35,41 @@ def main(stdscr):
     
 
     if mode != '.txt':
-        modified_sents = replace(content)
+        question_sents, answer_sents = replace(content)
         
-        with open('output.txt', 'w') as file:
-            file.write('\n'.join(modified_sents))
+        with open('answer.txt', 'w') as file:
+            file.write('[ANSWER SHEET]\n')
+            file.write('\n'.join(answer_sents))
+
+        with open('question.txt', 'w') as file:
+            file.write('[QUESTION SHEET]\n')
+            file.write('\n'.join(question_sents))
 
     else:
         
-        modified_paras = []
+        answer_paras = []
+        question_paras = []
 
         for paragraph in content: 
-            modified_sents = replace(paragraph)
-            modified_paras.append(modified_sents)
+            question_sents, answer_sents = replace(paragraph)
+            answer_paras.append(answer_sents)
+            question_paras.append(question_sents)
             
-        with open('output.txt', 'w') as file:
-            for modified_para in modified_paras:
-                file.write('\n'.join(modified_para))
+        with open('answer.txt', 'w') as file:
+
+            file.write('[ANSWER SHEET]\n')
+
+            for answer_para in answer_paras:
+                file.write('\n'.join(answer_para))
+
+        with open('question.txt', 'w') as file:
+            file.write('[QUESTION SHEET]\n')
+
+            for question_para in question_paras:
+                file.write('\n'.join(question_para))
 
     stdscr.clear()
-
-    curses.start_color()
-
     success_msg = "Cloze passage generated! Press enter to exit."
-
     show_success(stdscr, success_msg)
     
     # wait for user to press enter to exit the program
@@ -167,7 +177,6 @@ def check_format(source, mode):
     else:
         return False
         
-
 def read_txt(filename):
     with open(filename, 'r') as file:
         content = file.readlines()
@@ -196,9 +205,9 @@ def get_content(source, mode):
     except FileNotFoundError:
         raise ValueError("File does not exist")
         
-
 def replace(content):
-    modified_sents = []
+    answer_sents = []
+    question_sents = []
 
     nlp = spacy.load("en_core_web_sm")
             
@@ -221,7 +230,7 @@ def replace(content):
 
                 # don't test students on contractions as they are too simplistic
                 # \' uses an escape character to check if a literal apostrophe forms part of the token
-                if '\'' not in str(token.text):
+                if '\'' not in token.text:
                     answer = token
                     
                     blank = '_' * (len(answer) + 5)
@@ -230,13 +239,17 @@ def replace(content):
                     # find the answer in text and replace it with replacement 
                     # do this only for the first occurrence to avoid repetition
         
-                    modified_sent = re.sub(r'\b' + answer.text +  r'\b', replacement, text, count=1)
-                    modified_sents.append(modified_sent)
+                    answer_sent = re.sub(r'\b' + answer.text +  r'\b', replacement, text, count=1)
+                    answer_sents.append(answer_sent)
+
+                    question_sent = re.sub(r'\b' + answer.text +  r'\b', blank, text, count=1)
+                    question_sents.append(question_sent)
+                    
 
                     break
                 
 
-    return modified_sents
+    return question_sents, answer_sents
 
 def show_error(stdscr,error_msg):
     curses.start_color()
@@ -246,7 +259,6 @@ def show_error(stdscr,error_msg):
 
      # set the color pair to the error message text 
     stdscr.addstr(0,1, error_msg, curses.color_pair(1))
-
 
 def show_success(stdscr, success_msg):
     curses.start_color()
