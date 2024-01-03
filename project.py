@@ -214,7 +214,8 @@ def replace(content):
     # call natural language processing object on str of text
     doc = nlp(content)
 
-    
+    index = 1 
+
     for sent in doc.sents:
         # remove newlines from the end of sentence 
         text = sent.text.replace("\n", "")
@@ -225,6 +226,7 @@ def replace(content):
         
         
         for token in randomized_sent:
+            
             
             if token.pos_ not in ['INTJ', 'NOUN', 'NUM', 'PUNCT', 'SYM', 'PROPN', 'X', 'SPACE']:
 
@@ -239,12 +241,13 @@ def replace(content):
                     # find the answer in text and replace it with replacement 
                     # do this only for the first occurrence to avoid repetition
         
-                    answer_sent = re.sub(r'\b' + answer.text +  r'\b', replacement, text, count=1)
+                    answer_sent = re.sub(r'\b' + answer.text +  r'\b', f' ({index}) {replacement}', text, count=1)
                     answer_sents.append(answer_sent)
 
-                    question_sent = re.sub(r'\b' + answer.text +  r'\b', blank, text, count=1)
+                    question_sent = re.sub(r'\b' + answer.text +  r'\b', f' ({index}) {blank}', text, count=1)
                     question_sents.append(question_sent)
                     
+                    index += 1
 
                     break
                 

@@ -5,10 +5,7 @@
 - [X] Support for Microsoft Word & PDFs (input text)
 - [ ] Support for Microsoft Word & PDFs (output text)
 - [X] Consider handling ValueError in stdscr
-- [ ] Separate question sheet and answer sheet
-- [ ] Adjust frequency of blanks
-- [ ] Choose word types
-- [ ] Fix contractions still being tested 
+- [X] Separate question sheet and answer sheet
 
 ## CS50P Final Project Requirements 
 - [X] Implemented in python, in a project.py file
