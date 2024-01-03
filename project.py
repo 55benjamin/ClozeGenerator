@@ -83,7 +83,8 @@ def get_mode(stdscr):
     curses.curs_set(0)
 
     # add title text 
-    stdscr.addstr(0, 1, "ClozeGenerator. Updated Jan 2023")
+    stdscr.addstr(0, 1, "Cloze Generator. Updated Jan 2023")
+    stdscr.addstr(1, 1, "https://github.com/55benjamin/ClozeGenerator")
     stdscr.refresh()
 
     # record all mouse movements and get the mouse position
@@ -96,7 +97,7 @@ def get_mode(stdscr):
     
 
     # display options on the screen
-    stdscr.addstr(3,1, "To start, please select an input method:")
+    stdscr.addstr(3,1, "To start, please click select and click on an input method:")
     stdscr.addstr(5,1, pdf_opt)
     stdscr.addstr(5,20, word_opt)
     stdscr.addstr(5,40, text_opt)
@@ -118,10 +119,16 @@ def get_mode(stdscr):
             elif 37 <= x <= 55 and 3 <= y <= 10:
                 mode = '.txt'
 
-        if mode:
-            break
+            else:
+                continue
 
-    return mode 
+            
+            return mode 
+            
+        else:
+            continue
+
+    
      
 def get_source(stdscr,mode):
     # clear out the terminal 
