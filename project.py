@@ -10,6 +10,7 @@ from pdfminer.high_level import extract_text
 
 
 def main(stdscr):
+    # wait for the user to select the input mode
     mode = get_mode(stdscr)
 
     while True: 
@@ -28,52 +29,24 @@ def main(stdscr):
             
             continue
     
-
+    # show progress message 
     stdscr.clear()
     stdscr.addstr(0,1, "Generating cloze passage...")
     stdscr.refresh()
     
-
     if mode != '.txt':
-        question_sents, answer_sents = replace(content)
-        
-        with open('answer.txt', 'w') as file:
-            file.write('[ANSWER SHEET]\n')
-            file.write('\n'.join(answer_sents))
-
-        with open('question.txt', 'w') as file:
-            file.write('[QUESTION SHEET]\n')
-            file.write('\n'.join(question_sents))
+        generate_from_othrs(content)
 
     else:
+        generate_from_txt(content)
         
-        answer_paras = []
-        question_paras = []
-
-        for paragraph in content: 
-            question_sents, answer_sents = replace(paragraph)
-            answer_paras.append(answer_sents)
-            question_paras.append(question_sents)
-            
-        with open('answer.txt', 'w') as file:
-
-            file.write('[ANSWER SHEET]\n')
-
-            for answer_para in answer_paras:
-                file.write('\n'.join(answer_para))
-
-        with open('question.txt', 'w') as file:
-            file.write('[QUESTION SHEET]\n')
-
-            for question_para in question_paras:
-                file.write('\n'.join(question_para))
-
     stdscr.clear()
     success_msg = "Cloze passage generated! Press enter to exit."
     show_success(stdscr, success_msg)
     
     # wait for user to press enter to exit the program
     stdscr.getch()
+
 
 
 # clears terminal and lets user click to select input mode (.pdf, .docx or .txt)
@@ -272,6 +245,41 @@ def replace(content):
                 
 
     return question_sents, answer_sents
+
+def generate_from_othrs(content):
+    question_sents, answer_sents = replace(content)
+        
+    with open('answer.txt', 'w') as file:
+        file.write('[ANSWER SHEET]\n')
+        file.write('\n'.join(answer_sents))
+
+    with open('question.txt', 'w') as file:
+        file.write('[QUESTION SHEET]\n')
+        file.write('\n'.join(question_sents))
+        
+
+def generate_from_txt(content):
+    answer_paras = []
+    question_paras = []
+
+    for paragraph in content: 
+        question_sents, answer_sents = replace(paragraph)
+        answer_paras.append(answer_sents)
+        question_paras.append(question_sents)
+        
+    with open('answer.txt', 'w') as file:
+
+        file.write('[ANSWER SHEET]\n')
+
+        for answer_para in answer_paras:
+            file.write('\n'.join(answer_para))
+
+    with open('question.txt', 'w') as file:
+        file.write('[QUESTION SHEET]\n')
+
+        for question_para in question_paras:
+            file.write('\n'.join(question_para))
+
 
 # shows error message(red) on stdscr 
 def show_error(stdscr,error_msg):
