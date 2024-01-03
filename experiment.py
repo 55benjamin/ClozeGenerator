@@ -1,6 +1,5 @@
 import re
 import curses
-from os.path import splitext
 
 def choose_option(stdscr):
 

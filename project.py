@@ -13,7 +13,7 @@ from pdfminer.high_level import extract_text
 def main():
 
 
-    filename = input("Please input filename with its extension (.txt):")
+    filename = 'placeholder'
 
     content = get_content(filename)
 
@@ -64,18 +64,15 @@ def get_content(filename):
     ext = splitext(filename)[1]
     
 
-    if ext in accepted_exts:
-        try:
-            content = accepted_exts[ext](filename)
-            return content
+    
+    try:
+        content = accepted_exts[ext](filename)
+        return content
 
-        except FileNotFoundError:
-            # sys.exit if file does not exist
-            raise ValueError("File does not exist")
-            
+    except FileNotFoundError:
+        raise ValueError("File does not exist")
+        
 
-    else:
-        raise ValueError("Please ensure file is a .docx, .pdf or .txt file")
 
 
 def replace(content):
