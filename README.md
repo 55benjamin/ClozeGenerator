@@ -2,8 +2,11 @@
 
 ## TODO
 - [X] Randomize words for even distribution of blanks
-- [X] Support for Microsoft Word & PDFs
-- [ ] Support for extracting text from webpages
+- [X] Support for Microsoft Word & PDFs (input text)
+- [ ] Support for Microsoft Word & PDFs (output text)
+- [ ] Consider animated text/progress bar for status
+- [ ] Consider handling ValueError in stdscr
+- [ ] Find out if you can open a file directly with a command
 - [ ] Adjust frequency of blanks
 - [ ] Choose word types
 

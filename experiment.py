@@ -7,6 +7,7 @@ def main(stdscr):
     source = get_source(stdscr,mode)
     stdscr.clear()
     stdscr.addstr(0,1, source)
+    stdscr.getch()
 
 
 
@@ -125,5 +126,5 @@ def check_format(source, mode):
         
 
 
-        
+
 curses.wrapper(main)
