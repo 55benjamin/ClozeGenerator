@@ -22,13 +22,10 @@ def main(stdscr):
         except ValueError:
             curses.start_color()
 
-            error_msg = 'File not found. Please try entering a different name and ensure the extension is correct'
+            error_msg = 'File not found. Please try entering a different name and ensure the extension is correct.'
 
-            # set red text against black background 
-            curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
+            show_error(stdscr,error_msg)
 
-            # set the color pair to the error message text 
-            stdscr.addstr(0,1, error_msg, curses.color_pair(1))
             stdscr.refresh()
             time.sleep(2)
             
@@ -144,13 +141,7 @@ def get_source(stdscr,mode):
         if check_format(source, mode) is False:
             error_msg = 'Please ensure the file and its extension are entered correctly. Alternatively, press Ctrl-C to exit the program'
 
-            curses.start_color()
-
-            # set red text against black background 
-            curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
-
-            # set the color pair to the error message text 
-            stdscr.addstr(0,1, error_msg, curses.color_pair(1))
+            show_error(stdscr, error_msg)
             
             # clear out the user's input, on the same row, and beginning column of input 
             stdscr.addstr(1, (1+len(prompt)), " " * (len(source)))
@@ -252,7 +243,14 @@ def replace(content):
 
     return modified_sents
 
+def show_error(stdscr,error_msg):
+    curses.start_color()
 
+    # set red text against black background 
+    curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
+
+     # set the color pair to the error message text 
+    stdscr.addstr(0,1, error_msg, curses.color_pair(1))
 
 
 if __name__ == "__main__":
