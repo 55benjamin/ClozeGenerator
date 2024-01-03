@@ -39,7 +39,18 @@ def main(stdscr):
                 file.write('\n'.join(modified_para))
 
     stdscr.clear()
-    stdscr.addstr(0,1, "Cloze passage generated! Press enter to exit.")
+
+    curses.start_color()
+
+    success_msg = "Cloze passage generated! Press enter to exit."
+
+    # set green text against black background 
+    curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
+
+    # set the color pair to the error message text 
+    stdscr.addstr(0,1, success_msg, curses.color_pair(2))
+    
+    # wait for user to press enter to exit the program
     stdscr.getch()
 
 

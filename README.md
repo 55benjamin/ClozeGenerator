@@ -6,6 +6,7 @@
 - [ ] Support for Microsoft Word & PDFs (output text)
 - [ ] Consider animated text/progress bar for status
 - [ ] Consider handling ValueError in stdscr
+- [ ] Separate question sheet and answer sheet
 - [ ] Find out if you can open a file directly with a command
 - [ ] Adjust frequency of blanks
 - [ ] Choose word types
@@ -13,7 +14,7 @@
 ## CS50P Final Project Requirements 
 - [X] Implemented in python, in a project.py file
 - [X] Main function 
-- [ ] 3 or more additional functions 
+- [X] 3 or more additional functions 
 - [ ] 3 or more tests, executable with pytest in a test_project.py file
 - [ ] tests must have same name as custom functions 
 - [ ] requirements.txt listing all pip-installable libraries
