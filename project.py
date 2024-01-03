@@ -1,5 +1,4 @@
 import re
-import sys
 import time
 import random
 import spacy
@@ -61,11 +60,7 @@ def main(stdscr):
 
     success_msg = "Cloze passage generated! Press enter to exit."
 
-    # set green text against black background 
-    curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
-
-    # set the color pair to the error message text 
-    stdscr.addstr(0,1, success_msg, curses.color_pair(2))
+    show_success(stdscr, success_msg)
     
     # wait for user to press enter to exit the program
     stdscr.getch()
@@ -251,6 +246,16 @@ def show_error(stdscr,error_msg):
 
      # set the color pair to the error message text 
     stdscr.addstr(0,1, error_msg, curses.color_pair(1))
+
+
+def show_success(stdscr, success_msg):
+    curses.start_color()
+     
+    # set green text against black background 
+    curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
+
+    # set the color pair to the error message text 
+    stdscr.addstr(0,1, success_msg, curses.color_pair(2))
 
 
 if __name__ == "__main__":
