@@ -18,7 +18,7 @@ def main(stdscr):
             content = get_content(source, mode)
             break
 
-        except ValueError:
+        except FileNotFoundError:
             error_msg = 'File not found. Please try entering a different name and ensure the extension is correct.'
 
             show_error(stdscr,error_msg)
@@ -76,6 +76,7 @@ def main(stdscr):
     stdscr.getch()
 
 
+# clears terminal and lets user click to select input mode (.pdf, .docx or .txt)
 def get_mode(stdscr):
 
     # clear screen and hide the cursor
@@ -122,14 +123,14 @@ def get_mode(stdscr):
             else:
                 continue
 
-            
             return mode 
             
         else:
             continue
 
-    
-     
+
+# clears terminal and lets user input file location
+# displays error message if incorrect file type
 def get_source(stdscr,mode):
     # clear out the terminal 
     stdscr.clear()
@@ -174,6 +175,8 @@ def get_source(stdscr,mode):
 
     return source 
 
+
+# checks if extension of provided file matches selected mode
 def check_format(source, mode):
     
     ext = splitext(source)[1]
@@ -183,20 +186,27 @@ def check_format(source, mode):
 
     else:
         return False
-        
+
+
+# reads and returns contents of txt file 
 def read_txt(filename):
     with open(filename, 'r') as file:
         content = file.readlines()
         return content
     
+# reads and returns contents of docx (word) file
 def read_docx(filename):
     content = docx2txt.process(filename)
     return content 
 
+# reads and returns contents of pdf file
 def read_pdf(filename):
     content = extract_text(filename)
     return content 
 
+# matches chosen mode to method of content extraction
+# runs that function (read_txt, read_docx or read_pdf)
+# raises FileNotFoundError if file dosen't exist
 def get_content(source, mode):
 
     accepted_modes = {
@@ -210,8 +220,10 @@ def get_content(source, mode):
         return content
 
     except FileNotFoundError:
-        raise ValueError("File does not exist")
-        
+        raise FileNotFoundError("File does not exist")
+
+
+# takes text as input and replaces text to form questions/answers      
 def replace(content):
     answer_sents = []
     question_sents = []
@@ -261,6 +273,7 @@ def replace(content):
 
     return question_sents, answer_sents
 
+# shows error message(red) on stdscr 
 def show_error(stdscr,error_msg):
     curses.start_color()
 
@@ -270,6 +283,7 @@ def show_error(stdscr,error_msg):
      # set the color pair to the error message text 
     stdscr.addstr(0,1, error_msg, curses.color_pair(1))
 
+# shows success message (green) on stdscr
 def show_success(stdscr, success_msg):
     curses.start_color()
      
