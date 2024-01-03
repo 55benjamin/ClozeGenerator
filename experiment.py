@@ -1,7 +1,16 @@
 import re
 import curses
+from os.path import splitext
 
-def choose_option(stdscr):
+def main(stdscr):
+    mode = get_mode(stdscr)
+    source = get_source(stdscr,mode)
+    stdscr.clear()
+    stdscr.addstr(0,1, source)
+
+
+
+def get_mode(stdscr):
 
     # clear screen and hide the cursor
     stdscr.clear()
@@ -46,13 +55,12 @@ def choose_option(stdscr):
         if mode:
             break
 
-    source = get_source(stdscr,mode)
+    return mode 
+    
 
-    return source
+    
     
         
-
- 
 def get_source(stdscr,mode):
     # clear out the terminal 
     stdscr.clear()
@@ -69,8 +77,8 @@ def get_source(stdscr,mode):
         # display the prompt 
         stdscr.addstr(1, 1, prompt)  
 
-        # get the user's input 
-        source = str(stdscr.getstr())
+        # get the user's input and decode it from a byte string to regular string
+        source = stdscr.getstr().decode('utf-8')
 
         
         if check_format(source, mode) is False: 
@@ -106,16 +114,16 @@ def get_source(stdscr,mode):
 
 def check_format(source, mode):
     
-        pattern = f'.*\{mode}'
+    ext = splitext(source)[1]
 
-        match = re.search(pattern, source, re.VERBOSE)
+    if str(ext) == str(mode):
+        return True
 
-        if match:
-            return True
-
-        elif not match:
-            return False
+    else:
+        return False
+        
+        
 
 
         
-curses.wrapper(choose_option)
+curses.wrapper(main)
