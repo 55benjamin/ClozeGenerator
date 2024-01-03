@@ -2,6 +2,7 @@ import re
 import sys
 import random
 import spacy
+import curses
 import docx2txt
 from os.path import splitext
 from newspaper import Article

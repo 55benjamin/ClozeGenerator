@@ -19,14 +19,13 @@ def choose_option(stdscr):
     pdf_opt = "PDF (.pdf)"
     word_opt = "Word (.docx)"
     text_opt = "Text (.txt)"
-    url_opt = "Enter a web URL"
+    
 
     # display options on the screen
     stdscr.addstr(3,1, "To start, please select an input method:")
     stdscr.addstr(5,1, pdf_opt)
     stdscr.addstr(5,20, word_opt)
     stdscr.addstr(5,40, text_opt)
-    stdscr.addstr(5,60, url_opt)
 
     
     stdscr.getch()
@@ -44,9 +43,6 @@ def choose_option(stdscr):
 
             elif 37 <= x <= 55 and 3 <= y <= 10:
                 mode = '.txt'
-
-            elif 57 <= x <= 70 and 3 <= y <= 10:
-                mode = 'url'
 
         if mode:
             break
@@ -66,11 +62,9 @@ def get_source(stdscr,mode):
     curses.echo()  
     curses.curs_set(1)
     
-    if mode != 'url':
-        prompt = f"File where input text is stored (eg. extract{mode}):"
 
-    else:
-        prompt = "Please input a link (eg. https://www.timeforkids.com/...):"
+    prompt = f"File where input text is stored (eg. extract{mode}):"
+
     
     while True: 
         # display the prompt 
@@ -83,13 +77,17 @@ def get_source(stdscr,mode):
         if check_format(source, mode) is False: 
             error_msg = 'Please ensure the file and its extension are entered correctly. Alternatively, press Ctrl-C to exit the program'
 
-            if mode == 'url':
-                error_msg = 'Please enter a suitable link. Alternatively, press Ctrl-C to exit the program'
-                
             curses.start_color()
+
+            # set red text against black background 
             curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
+
+            # set the color pair to the error message text 
             stdscr.addstr(0,1, error_msg, curses.color_pair(1))
+            
+            # clear out the user's input, on the same row, and beginning column of input 
             stdscr.addstr(1, (1+len(prompt)), " " * (len(source)))
+
             stdscr.refresh()
 
             continue 
@@ -97,8 +95,6 @@ def get_source(stdscr,mode):
         elif check_format(source, mode) is True: 
             break 
 
-
-    
     # disable input mode and hide the cursor          
     curses.noecho()  
     curses.curs_set(0)
@@ -111,17 +107,7 @@ def get_source(stdscr,mode):
 
 def check_format(source, mode):
     
-        if mode != 'url':
-            pattern = f'.*\{mode}'
-
-        else: 
-            # lifted from own CS50W project at https://github.com/me50/55benjamin/blob/web50/projects/2020/x/capstone/perusal/extractors.py
-            pattern = r"""
-            (\w+:\/{2})  # Matches the scheme (eg. http://)
-            (\w+\.)?  # Matches the subdomain, which is optional (eg. www.)
-            (\w+\.\w+)  # Matches the domain 
-            (\/.+)   # Matches the rest of the url (eg. /2023/09/21...)
-            """
+        pattern = f'.*\{mode}'
 
         match = re.search(pattern, source, re.VERBOSE)
 
@@ -132,7 +118,5 @@ def check_format(source, mode):
             return False
 
 
-
         
-            
 curses.wrapper(choose_option)
