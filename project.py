@@ -34,9 +34,8 @@ def main(stdscr):
     stdscr.addstr(0,1, "Generating cloze passage...")
     stdscr.refresh()
     
-
+    # write to the question and answer files 
     generate(content)
-
 
     stdscr.clear()
     success_msg = "Cloze passage generated! Press enter to exit."
@@ -228,10 +227,10 @@ def replace(content):
                     # find the answer in text and replace it with replacement 
                     # do this only for the first occurrence to avoid repetition
         
-                    answer_sent = re.sub(r'\b' + answer.text +  r'\b', f' ({index}) {replacement}', text, count=1)
+                    answer_sent = re.sub(r'\b' + answer.text +  r'\b', f'({index}) {replacement}', text, count=1)
                     answer_sents.append(answer_sent)
 
-                    question_sent = re.sub(r'\b' + answer.text +  r'\b', f' ({index}) {blank}', text, count=1)
+                    question_sent = re.sub(r'\b' + answer.text +  r'\b', f'({index}) {blank}', text, count=1)
                     question_sents.append(question_sent)
                     
                     index += 1
