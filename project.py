@@ -1,4 +1,6 @@
 import re
+import sys
+import time
 import random
 import spacy
 import curses
@@ -10,15 +12,33 @@ from pdfminer.high_level import extract_text
 
 def main(stdscr):
     mode = get_mode(stdscr)
-    source = get_source(stdscr,mode)
+
+    while True: 
+        try: 
+            source = get_source(stdscr,mode)
+            content = get_content(source, mode)
+            break
+
+        except ValueError:
+            curses.start_color()
+
+            error_msg = 'File not found. Please try entering a different name and ensure the extension is correct'
+
+            # set red text against black background 
+            curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
+
+            # set the color pair to the error message text 
+            stdscr.addstr(0,1, error_msg, curses.color_pair(1))
+            stdscr.refresh()
+            time.sleep(2)
+            
+            continue
+    
 
     stdscr.clear()
     stdscr.addstr(0,1, "Generating cloze passage...")
     stdscr.refresh()
     
-
-    content = get_content(source, mode)
-
 
     if mode != '.txt':
         modified_sents = replace(content)
@@ -121,7 +141,7 @@ def get_source(stdscr,mode):
         source = stdscr.getstr().decode('utf-8')
 
         
-        if check_format(source, mode) is False: 
+        if check_format(source, mode) is False:
             error_msg = 'Please ensure the file and its extension are entered correctly. Alternatively, press Ctrl-C to exit the program'
 
             curses.start_color()

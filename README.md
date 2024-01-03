@@ -4,10 +4,8 @@
 - [X] Randomize words for even distribution of blanks
 - [X] Support for Microsoft Word & PDFs (input text)
 - [ ] Support for Microsoft Word & PDFs (output text)
-- [ ] Consider animated text/progress bar for status
-- [ ] Consider handling ValueError in stdscr
+- [X] Consider handling ValueError in stdscr
 - [ ] Separate question sheet and answer sheet
-- [ ] Find out if you can open a file directly with a command
 - [ ] Adjust frequency of blanks
 - [ ] Choose word types
 
