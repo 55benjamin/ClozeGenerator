@@ -38,6 +38,7 @@ def main(stdscr):
     
     # write to the question and answer files 
     generate_to_docx(content)
+    # generate_to_txt(content)
 
     stdscr.clear()
     success_msg = "Cloze passage generated! Press enter to exit."
@@ -239,7 +240,7 @@ def replace(content):
     return question_sents, answer_sents
 
 # writes to the question and answer files using the return value of replace(content)
-def generate(content):
+def generate_to_txt(content):
     question_sents, answer_sents = replace(content)
         
     with open('answer.txt', 'w') as file:
@@ -259,8 +260,8 @@ def generate_to_docx(content):
 
 
     # add a new paragraph to each of the documents 
-    questions_paragraph = questions.add_paragraph('\n'.join(question_sents))
-    answers_paragraph = answers.add_paragraph(('\n'.join(answer_sents)))
+    questions_paragraph = questions.add_paragraph(''.join(question_sents))
+    answers_paragraph = answers.add_paragraph((''.join(answer_sents)))
 
     # set double line spacing 
     questions_paragraph.paragraph_format.line_spacing = 2.0  

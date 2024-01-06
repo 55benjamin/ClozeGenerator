@@ -11,7 +11,7 @@
 
 ## TODO FOR MICROSOFT WORD OUTPUT SUPPORT
 - [ ] Add option to export via txt/docx in stdscr
-- [ ] Join all sentences into one paragraph instead of separate lines
+- [X] Join all sentences into one paragraph instead of separate lines
 - [ ] Add titles for question and answer sheet 
 
 ## CS50P Final Project Requirements 
