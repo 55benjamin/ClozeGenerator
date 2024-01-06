@@ -55,7 +55,19 @@ def main(stdscr):
     stdscr.getch()
 
 
-# clears terminal and lets user click to select input mode (.pdf, .docx or .txt)
+"""
+Disclosure: The following functions prefixed with 'get' rely on python's 'curses' module. 
+In arriving at the decision to use this module and in understanding some of the functions and attributes in this module, 
+I probed ChatGPT based on my objectives and requirements. I did not copy code from it verbatim and only referred to it, in tandem with 
+the official 'curses' documentation (https://docs.python.org/3/library/curses.html#), when I ran into errors or needed clarification on 
+its documentation. The prompts that I used are viewable below:
+
+Clickable Python Terminal: Curses: https://chat.openai.com/share/eaa46c49-4c74-423f-9bbc-5d0d95eb6f17
+Decode Curses Input: https://chat.openai.com/share/68af53d0-65f5-4065-baf8-bc36ff7c8e89
+"""
+
+
+# lets user click to select input mode (.pdf, .docx or .txt)
 def get_mode(stdscr):
 
     # clear screen and hide the cursor
@@ -107,7 +119,7 @@ def get_mode(stdscr):
         else:
             continue
 
-# clears terminal and lets user input file location
+# lets user input file location
 # displays error message if incorrect file type
 def get_source(stdscr,mode):
     # clear out the terminal 
@@ -154,8 +166,7 @@ def get_source(stdscr,mode):
     return source 
 
 
-
-# clears terminal and lets user click to select output mode (.docx or .txt)
+# lets user click to select output mode (.docx or .txt)
 def get_dest(stdscr):
 
     # clear screen and hide the cursor
@@ -279,12 +290,32 @@ def get_limit(stdscr):
 
     return limit
 
+# shows error message(red) on stdscr 
+def show_error(stdscr,error_msg):
+    curses.start_color()
+
+    # set red text against black background 
+    curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
+
+     # set the color pair to the error message text 
+    stdscr.addstr(0,1, error_msg, curses.color_pair(1))
+
+# shows success message (green) on stdscr
+def show_success(stdscr, success_msg):
+    curses.start_color()
+     
+    # set green text against black background 
+    curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
+
+    # set the color pair to the error message text 
+    stdscr.addstr(0,1, success_msg, curses.color_pair(2))
+
+# checks if limit is a positive integer
+# else raises ValueError
 def validate_limit(input):
     if int(input) <= 0:
         raise ValueError
     
-    
-
 # checks if extension of provided file matches selected mode
 def validate_format(source, mode):
     
@@ -296,7 +327,7 @@ def validate_format(source, mode):
     else:
         return False
 
-# reads and returns contents of txt file 
+
 def read_txt(filename):
     with open(filename, 'r') as file:
         content = file.readlines()
@@ -304,12 +335,10 @@ def read_txt(filename):
         # join the list of paragraphs into a single string
         return '\n'.join(content)
     
-# reads and returns contents of docx (word) file
 def read_docx(filename):
     content = docx2txt.process(filename)
     return content 
 
-# reads and returns contents of pdf file
 def read_pdf(filename):
     content = extract_text(filename)
 
@@ -318,7 +347,7 @@ def read_pdf(filename):
     content = content.replace('\x0c', '')
     return content 
 
-index = 0
+
 
 # matches chosen mode to method of content extraction
 # runs that function (read_txt, read_docx or read_pdf)
@@ -337,6 +366,9 @@ def get_content(source, mode):
 
     except FileNotFoundError:
         raise FileNotFoundError("File does not exist")
+
+# global index to prefix blanks and total marks 
+index = 0
 
 # takes text as input and replaces text to form questions/answers      
 def replace(content, limit):
@@ -386,7 +418,6 @@ def replace(content, limit):
 
     return question_sents, answer_sents
 
-# writes to the question and answer files using the return value of replace(content)
 def generate_to_txt(content, title, limit):
     global index
     question_sents, answer_sents = replace(content, limit)
@@ -430,30 +461,8 @@ def generate_to_docx(content, title, limit):
     questions.save('questions.docx')
     answers.save('answers.docx')
 
-
-
-
-        
-# shows error message(red) on stdscr 
-def show_error(stdscr,error_msg):
-    curses.start_color()
-
-    # set red text against black background 
-    curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
-
-     # set the color pair to the error message text 
-    stdscr.addstr(0,1, error_msg, curses.color_pair(1))
-
-# shows success message (green) on stdscr
-def show_success(stdscr, success_msg):
-    curses.start_color()
-     
-    # set green text against black background 
-    curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
-
-    # set the color pair to the error message text 
-    stdscr.addstr(0,1, success_msg, curses.color_pair(2))
-
+  
 
 if __name__ == "__main__":
+    # wrapper is necessary for any functions that use the stdscr from the curses module
     curses.wrapper(main)
