@@ -12,7 +12,7 @@
 ## TODO FOR MICROSOFT WORD OUTPUT SUPPORT
 - [ ] Add option to export via txt/docx in stdscr
 - [X] Join all sentences into one paragraph instead of separate lines
-- [ ] Add titles for question and answer sheet 
+- [X] Add titles for question and answer sheet 
 
 ## CS50P Final Project Requirements 
 - [X] Implemented in python, in a project.py file

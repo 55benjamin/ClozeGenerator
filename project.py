@@ -265,9 +265,11 @@ def generate_to_docx(content):
     answers = Document()
 
     # add titles to each of the documents
-    questions.add_paragraph('Cloze Passage: Questions')
-    answers.add_paragraph('Cloze Passage: Answers')
-
+    # according to https://www.geeksforgeeks.org/working-with-titles-and-heading-python-docx-module/, 
+    # level=1 is the largest section header. 
+    questions.add_heading('Cloze Passage: Questions\n', level=1)
+    answers.add_heading('Cloze Passage: Answers\n', level=1)
+    
 
     # add a new paragraph to each of the documents 
     questions_paragraph = questions.add_paragraph((' '.join(question_sents)))
