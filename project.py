@@ -141,7 +141,11 @@ def get_source(stdscr,mode):
         source = stdscr.getstr().decode('utf-8')
 
         
-        if validate_format(source, mode) is False:
+        try: 
+            validate_format(source, mode)
+            break
+
+        except ValueError:
             error_msg = 'Please ensure the file and its extension are entered correctly. Alternatively, press Ctrl-C to exit the program'
 
             show_error(stdscr, error_msg)
@@ -149,12 +153,10 @@ def get_source(stdscr,mode):
             # clear out the user's input, on the same row, and beginning column of input 
             stdscr.addstr(1, (1+len(prompt)), " " * (len(source)))
 
-            stdscr.refresh()
-
-            continue 
-
-        elif validate_format(source, mode) is True: 
-            break 
+            stdscr.refresh() 
+        
+            continue
+            
 
     # disable input mode and hide the cursor          
     curses.noecho()  
@@ -321,12 +323,8 @@ def validate_format(source, mode):
     
     ext = splitext(source)[1]
 
-    if str(ext) == str(mode):
-        return True
-
-    else:
-        return False
-
+    if str(ext) != str(mode):
+        raise ValueError
 
 def read_txt(filename):
     with open(filename, 'r') as file:
@@ -405,8 +403,6 @@ def replace(content, limit):
 
                     # find the answer in text and replace it with replacement 
                     # do this only for the first occurrence to avoid repetition
-
-        
                     answer_sent = re.sub(r'\b' + answer.orth_ +  r'\b', f'({index}) {replacement}', text, count=1)
                     answer_sents.append(answer_sent)
 
@@ -462,7 +458,6 @@ def generate_to_docx(content, title, limit):
     answers.save('answers.docx')
 
   
-
 if __name__ == "__main__":
     # wrapper is necessary for any functions that use the stdscr from the curses module
     curses.wrapper(main)
