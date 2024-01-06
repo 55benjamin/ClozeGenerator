@@ -40,7 +40,7 @@ def main(stdscr):
     
     # write to the question and answer files 
     generate_to_docx(content)
-    # generate_to_txt(content)
+    generate_to_txt(content)
 
     stdscr.clear()
     success_msg = "Cloze passage generated! Press enter to exit."
@@ -175,6 +175,10 @@ def read_docx(filename):
 # reads and returns contents of pdf file
 def read_pdf(filename):
     content = extract_text(filename)
+
+    # Removes unnecessary 'form feed' control character 
+    # This is done as docx module dosen't accept control characters as input
+    content = content.replace('\x0c', '')
     return content 
 
 # matches chosen mode to method of content extraction
@@ -260,8 +264,13 @@ def generate_to_docx(content):
     questions = Document()
     answers = Document()
 
+    # add titles to each of the documents
+    questions.add_paragraph('Cloze Passage: Questions')
+    answers.add_paragraph('Cloze Passage: Answers')
+
+
     # add a new paragraph to each of the documents 
-    questions_paragraph = questions.add_paragraph(' '.join(question_sents))
+    questions_paragraph = questions.add_paragraph((' '.join(question_sents)))
     answers_paragraph = answers.add_paragraph((' '.join(answer_sents)))
 
     # set double line spacing 
