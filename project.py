@@ -20,6 +20,7 @@ def main(stdscr):
         try: 
             source = get_source(stdscr,mode)
             content = get_content(source, mode)
+            limit = get_limit(stdscr)
             dest = get_dest(stdscr)
             title = get_title(stdscr)
             break
@@ -41,13 +42,13 @@ def main(stdscr):
     
     # write to the question and answer files 
     if dest == '.docx':
-        generate_to_docx(content, title)
+        generate_to_docx(content, title, limit)
 
     elif dest == '.txt':
-        generate_to_txt(content, title)
+        generate_to_txt(content, title, limit)
 
     stdscr.clear()
-    success_msg = "Cloze passage generated! Press enter to exit."
+    success_msg = f"Cloze passage generated to questions{dest} and answers{dest}!\n Press ENTER to exit."
     show_success(stdscr, success_msg)
     
     # wait for user to press enter to exit the program
@@ -76,7 +77,7 @@ def get_mode(stdscr):
     
 
     # display options on the screen
-    stdscr.addstr(3,1, "To start, please select and click on an input method:")
+    stdscr.addstr(3,1, "Step 1 of 5: To start, please select and click on an input method:")
     stdscr.addstr(5,1, pdf_opt)
     stdscr.addstr(5,20, word_opt)
     stdscr.addstr(5,40, text_opt)
@@ -117,7 +118,7 @@ def get_source(stdscr,mode):
     curses.curs_set(1)
     
 
-    prompt = f"File where input text is stored (eg. extract{mode}):"
+    prompt = f"Step 2 of 5: Please enter the name of the file where the extract is stored (eg. article{mode}):"
 
     
     while True: 
@@ -128,7 +129,7 @@ def get_source(stdscr,mode):
         source = stdscr.getstr().decode('utf-8')
 
         
-        if check_format(source, mode) is False:
+        if validate_format(source, mode) is False:
             error_msg = 'Please ensure the file and its extension are entered correctly. Alternatively, press Ctrl-C to exit the program'
 
             show_error(stdscr, error_msg)
@@ -140,7 +141,7 @@ def get_source(stdscr,mode):
 
             continue 
 
-        elif check_format(source, mode) is True: 
+        elif validate_format(source, mode) is True: 
             break 
 
     # disable input mode and hide the cursor          
@@ -151,6 +152,7 @@ def get_source(stdscr,mode):
     stdscr.clear()
 
     return source 
+
 
 
 # clears terminal and lets user click to select output mode (.docx or .txt)
@@ -169,7 +171,7 @@ def get_dest(stdscr):
     
 
     # display options on the screen
-    stdscr.addstr(1,1, "Please click select and click on an input method:")
+    stdscr.addstr(1,1, "Step 4 of 5: Please click select and click on an output method:")
     stdscr.addstr(3,1, write_to_txt)
     stdscr.addstr(3,35, write_to_docx)
 
@@ -204,7 +206,7 @@ def get_title(stdscr):
     curses.curs_set(1)
     
 
-    prompt = "Please provide a title for the cloze passage:"
+    prompt = "Step 5 of 5: Please provide a title for the cloze passage:"
 
     # display the prompt 
     stdscr.addstr(1, 1, prompt)
@@ -221,9 +223,70 @@ def get_title(stdscr):
 
     return title
     
+def get_limit(stdscr):
+    # limit is blank by default
+    limit = '' 
+
+    # clear out the terminal 
+    stdscr.clear()
+
+    # enable input mode and show the cursor
+    curses.echo()  
+    curses.curs_set(1)
+    
+    stdscr.addstr(1,1, """Step 3 of 5: By default, the generator provides a blank for each sentence in the extract.
+ If you would like to limit the number of blanks/sentences, please input a number (eg. 10). 
+ Otherwise, press ENTER to continue.""")
+
+    prompt = "Limit:"
+
+    while True: 
+        # display the prompt 
+        stdscr.addstr(4, 1, prompt)
+
+        # get the user's input and decode it from a byte string to regular string
+        input = stdscr.getstr().decode('utf-8')
+
+    
+        if input == '':
+            break
+        
+        else:
+            try:
+               validate_limit(input)
+               limit = int(input)
+               break
+            
+            except ValueError:
+                error_msg = 'Please enter a valid positive number for the limit. Alternatively, press ENTER if you do not wish to set a limit.'
+
+                show_error(stdscr, error_msg)
+                
+                # clear out the user's input, on the same row, and beginning column of input 
+                stdscr.addstr(4, (1+len(prompt)), " " * (len(input)))
+
+                stdscr.refresh()
+
+                continue 
+    
+        
+    # disable input mode and hide the cursor          
+    curses.noecho()  
+    curses.curs_set(0)
+
+    # clear out the terminal 
+    stdscr.clear()
+
+    return limit
+
+def validate_limit(input):
+    if int(input) <= 0:
+        raise ValueError
+    
+    
 
 # checks if extension of provided file matches selected mode
-def check_format(source, mode):
+def validate_format(source, mode):
     
     ext = splitext(source)[1]
 
@@ -255,7 +318,7 @@ def read_pdf(filename):
     content = content.replace('\x0c', '')
     return content 
 
-index = 1 
+index = 0
 
 # matches chosen mode to method of content extraction
 # runs that function (read_txt, read_docx or read_pdf)
@@ -276,7 +339,7 @@ def get_content(source, mode):
         raise FileNotFoundError("File does not exist")
 
 # takes text as input and replaces text to form questions/answers      
-def replace(content):
+def replace(content, limit):
     global index
     answer_sents = []
     question_sents = []
@@ -288,7 +351,7 @@ def replace(content):
 
     
 
-    for sent in doc.sents:
+    for sent in list(doc.sents)[:limit]:
         # remove newlines from the end of sentence 
         text = sent.text.replace("\n", "")
 
@@ -300,7 +363,9 @@ def replace(content):
 
                 # don't test students on contractions as they are too simplistic
                 # \' uses an escape character to check if a literal apostrophe forms part of the token
-                if '\'' not in token.text:
+                if '\'' not in token.orth_:
+                    index += 1
+
                     answer = token
                     
                     blank = '_' * 20
@@ -308,24 +373,23 @@ def replace(content):
 
                     # find the answer in text and replace it with replacement 
                     # do this only for the first occurrence to avoid repetition
+
         
-                    answer_sent = re.sub(r'\b' + answer.text +  r'\b', f'({index}) {replacement}', text, count=1)
+                    answer_sent = re.sub(r'\b' + answer.orth_ +  r'\b', f'({index}) {replacement}', text, count=1)
                     answer_sents.append(answer_sent)
 
-                    question_sent = re.sub(r'\b' + answer.text +  r'\b', f'({index}) {blank}', text, count=1)
+                    question_sent = re.sub(r'\b' + answer.orth_ +  r'\b', f'({index}) {blank}', text, count=1)
                     question_sents.append(question_sent)
                     
-                    index += 1
-
                     break
                 
 
     return question_sents, answer_sents
 
 # writes to the question and answer files using the return value of replace(content)
-def generate_to_txt(content, title):
+def generate_to_txt(content, title, limit):
     global index
-    question_sents, answer_sents = replace(content)
+    question_sents, answer_sents = replace(content, limit)
         
     with open('answers.txt', 'w') as file:
         file.write(f'[ANSWERS] Cloze Passage: {title} ({index} marks) \n')
@@ -335,9 +399,9 @@ def generate_to_txt(content, title):
         file.write(f'Cloze Passage: {title} ({index} marks) \n')
         file.write('\n'.join(question_sents))
 
-def generate_to_docx(content, title):
+def generate_to_docx(content, title, limit):
     global index 
-    question_sents, answer_sents = replace(content)
+    question_sents, answer_sents = replace(content, limit)
 
     # Create quesiton and answer Document objects
     questions = Document()

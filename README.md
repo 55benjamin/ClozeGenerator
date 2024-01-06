@@ -7,7 +7,7 @@
 - [X] Consider handling ValueError in stdscr
 - [X] Separate question sheet and answer sheet
 - [ ] Attribution for curser and pdf references 
-
+- [X] Allow users to cap number of blanks/sentences
 - [X] Dynamic titles (user can specify cloze title)
 
 
