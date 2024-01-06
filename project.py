@@ -21,6 +21,7 @@ def main(stdscr):
         try: 
             source = get_source(stdscr,mode)
             content = get_content(source, mode)
+            dest = get_dest(stdscr)
             break
 
         except FileNotFoundError:
@@ -39,8 +40,11 @@ def main(stdscr):
     stdscr.refresh()
     
     # write to the question and answer files 
-    generate_to_docx(content)
-    generate_to_txt(content)
+    if dest == '.docx':
+        generate_to_docx(content)
+
+    elif dest == '.txt':
+        generate_to_txt(content)
 
     stdscr.clear()
     success_msg = "Cloze passage generated! Press enter to exit."
@@ -72,7 +76,7 @@ def get_mode(stdscr):
     
 
     # display options on the screen
-    stdscr.addstr(3,1, "To start, please click select and click on an input method:")
+    stdscr.addstr(3,1, "To start, please select and click on an input method:")
     stdscr.addstr(5,1, pdf_opt)
     stdscr.addstr(5,20, word_opt)
     stdscr.addstr(5,40, text_opt)
@@ -147,6 +151,49 @@ def get_source(stdscr,mode):
     stdscr.clear()
 
     return source 
+
+
+# clears terminal and lets user click to select output mode (.docx or .txt)
+def get_dest(stdscr):
+
+    # clear screen and hide the cursor
+    stdscr.clear()
+    curses.curs_set(0)
+
+    # record all mouse movements and get the mouse position
+    curses.mousemask(curses.ALL_MOUSE_EVENTS | curses.REPORT_MOUSE_POSITION)
+
+    # option text to be displayed
+    write_to_txt = "Write to text (.txt) file"
+    write_to_docx = "Write to word (.docx) file"
+    
+
+    # display options on the screen
+    stdscr.addstr(1,1, "Please click select and click on an input method:")
+    stdscr.addstr(3,1, write_to_txt)
+    stdscr.addstr(3,35, write_to_docx)
+
+    
+    stdscr.getch()
+
+    # wait for user to click something
+    while True: 
+        if stdscr.getch() == curses.KEY_MOUSE:
+            _, x, y, _, _ = curses.getmouse()
+
+            if 0 <= x <= 25 and 2 <= y <= 4: 
+                dest = '.txt'
+
+            elif 30 <= x <= 60 and 2 <= y <= 4:
+                dest = '.docx'
+
+            else:
+                continue
+
+            return dest
+            
+        else:
+            continue
 
 # checks if extension of provided file matches selected mode
 def check_format(source, mode):
@@ -249,11 +296,11 @@ def replace(content):
 def generate_to_txt(content):
     question_sents, answer_sents = replace(content)
         
-    with open('answer.txt', 'w') as file:
+    with open('answers.txt', 'w') as file:
         file.write('[ANSWER SHEET]\n')
         file.write('\n'.join(answer_sents))
 
-    with open('question.txt', 'w') as file:
+    with open('questions.txt', 'w') as file:
         file.write('[QUESTION SHEET]\n')
         file.write('\n'.join(question_sents))
 

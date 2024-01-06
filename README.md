@@ -3,16 +3,15 @@
 ## TODO
 - [X] Randomize words for even distribution of blanks
 - [X] Support for Microsoft Word & PDFs (input text)
-- [ ] Support for Microsoft Word & PDFs (output text)
+- [X] Support for Microsoft Word & PDFs (output text)
 - [X] Consider handling ValueError in stdscr
 - [X] Separate question sheet and answer sheet
 - [ ] Attribution for curser and pdf references 
 
+- [ ] Dynamic titles (user can specify cloze title)
 
-## TODO FOR MICROSOFT WORD OUTPUT SUPPORT
-- [ ] Add option to export via txt/docx in stdscr
-- [X] Join all sentences into one paragraph instead of separate lines
-- [X] Add titles for question and answer sheet 
+
+
 
 ## CS50P Final Project Requirements 
 - [X] Implemented in python, in a project.py file
