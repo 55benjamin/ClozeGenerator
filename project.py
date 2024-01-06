@@ -6,6 +6,7 @@ import curses
 import docx2txt
 from os.path import splitext
 from pdfminer.high_level import extract_text
+
 from docx import Document
 from docx.shared import Pt
 from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -221,7 +222,7 @@ def replace(content):
                 if '\'' not in token.text:
                     answer = token
                     
-                    blank = '_' * (len(answer) + 5)
+                    blank = '_' * 20
                     replacement = f'{blank}[{answer.pos_}][{answer.text}]'
 
                     # find the answer in text and replace it with replacement 
@@ -259,10 +260,9 @@ def generate_to_docx(content):
     questions = Document()
     answers = Document()
 
-
     # add a new paragraph to each of the documents 
-    questions_paragraph = questions.add_paragraph(''.join(question_sents))
-    answers_paragraph = answers.add_paragraph((''.join(answer_sents)))
+    questions_paragraph = questions.add_paragraph(' '.join(question_sents))
+    answers_paragraph = answers.add_paragraph((' '.join(answer_sents)))
 
     # set double line spacing 
     questions_paragraph.paragraph_format.line_spacing = 2.0  
