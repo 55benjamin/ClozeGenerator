@@ -1,18 +1,5 @@
 # ClozeGenerator
 
-## TODO
-- [X] Randomize words for even distribution of blanks
-- [X] Support for Microsoft Word & PDFs (input text)
-- [X] Support for Microsoft Word & PDFs (output text)
-- [X] Consider handling ValueError in stdscr
-- [X] Separate question sheet and answer sheet
-- [X] Attribution for curses and pdf references 
-- [X] Allow users to cap number of blanks/sentences
-- [X] Dynamic titles (user can specify cloze title)
-
-
-
-
 ## CS50P Final Project Requirements 
 - [X] Implemented in python, in a project.py file
 - [X] Main function 
