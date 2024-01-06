@@ -8,7 +8,6 @@ from os.path import splitext
 from pdfminer.high_level import extract_text
 
 from docx import Document
-from docx.shared import Pt
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 
@@ -22,6 +21,7 @@ def main(stdscr):
             source = get_source(stdscr,mode)
             content = get_content(source, mode)
             dest = get_dest(stdscr)
+            title = get_title(stdscr)
             break
 
         except FileNotFoundError:
@@ -41,10 +41,10 @@ def main(stdscr):
     
     # write to the question and answer files 
     if dest == '.docx':
-        generate_to_docx(content)
+        generate_to_docx(content, title)
 
     elif dest == '.txt':
-        generate_to_txt(content)
+        generate_to_txt(content, title)
 
     stdscr.clear()
     success_msg = "Cloze passage generated! Press enter to exit."
@@ -195,6 +195,33 @@ def get_dest(stdscr):
         else:
             continue
 
+def get_title(stdscr):
+    # clear out the terminal 
+    stdscr.clear()
+
+    # enable input mode and show the cursor
+    curses.echo()  
+    curses.curs_set(1)
+    
+
+    prompt = "Please provide a title for the cloze passage:"
+
+    # display the prompt 
+    stdscr.addstr(1, 1, prompt)
+
+    # get the user's input and decode it from a byte string to regular string
+    title = stdscr.getstr().decode('utf-8')
+
+    # disable input mode and hide the cursor          
+    curses.noecho()  
+    curses.curs_set(0)
+
+    # clear out the terminal 
+    stdscr.clear()
+
+    return title
+    
+
 # checks if extension of provided file matches selected mode
 def check_format(source, mode):
     
@@ -228,6 +255,8 @@ def read_pdf(filename):
     content = content.replace('\x0c', '')
     return content 
 
+index = 1 
+
 # matches chosen mode to method of content extraction
 # runs that function (read_txt, read_docx or read_pdf)
 # raises FileNotFoundError if file dosen't exist
@@ -248,6 +277,7 @@ def get_content(source, mode):
 
 # takes text as input and replaces text to form questions/answers      
 def replace(content):
+    global index
     answer_sents = []
     question_sents = []
 
@@ -256,7 +286,7 @@ def replace(content):
     # call natural language processing object on str of text
     doc = nlp(content)
 
-    index = 1 
+    
 
     for sent in doc.sents:
         # remove newlines from the end of sentence 
@@ -293,18 +323,20 @@ def replace(content):
     return question_sents, answer_sents
 
 # writes to the question and answer files using the return value of replace(content)
-def generate_to_txt(content):
+def generate_to_txt(content, title):
+    global index
     question_sents, answer_sents = replace(content)
         
     with open('answers.txt', 'w') as file:
-        file.write('[ANSWER SHEET]\n')
+        file.write(f'[ANSWERS] Cloze Passage: {title} ({index} marks) \n')
         file.write('\n'.join(answer_sents))
 
     with open('questions.txt', 'w') as file:
-        file.write('[QUESTION SHEET]\n')
+        file.write(f'Cloze Passage: {title} ({index} marks) \n')
         file.write('\n'.join(question_sents))
 
-def generate_to_docx(content):
+def generate_to_docx(content, title):
+    global index 
     question_sents, answer_sents = replace(content)
 
     # Create quesiton and answer Document objects
@@ -314,8 +346,8 @@ def generate_to_docx(content):
     # add titles to each of the documents
     # according to https://www.geeksforgeeks.org/working-with-titles-and-heading-python-docx-module/, 
     # level=1 is the largest section header. 
-    questions.add_heading('Cloze Passage: Questions\n', level=1)
-    answers.add_heading('Cloze Passage: Answers\n', level=1)
+    questions.add_heading(f'Cloze Passage: {title} ({index} marks)\n', level=1)
+    answers.add_heading(f'[ANSWERS] Cloze Passage: {title} ({index} marks) \n', level=1)
     
 
     # add a new paragraph to each of the documents 

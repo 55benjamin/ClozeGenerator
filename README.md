@@ -8,7 +8,7 @@
 - [X] Separate question sheet and answer sheet
 - [ ] Attribution for curser and pdf references 
 
-- [ ] Dynamic titles (user can specify cloze title)
+- [X] Dynamic titles (user can specify cloze title)
 
 
 
