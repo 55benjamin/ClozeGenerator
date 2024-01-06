@@ -1,12 +1,14 @@
+# standard python modules
 import re
 import time
 import random
+from os.path import splitext
+
+# installable modules
 import spacy
 import curses
 import docx2txt
-from os.path import splitext
 from pdfminer.high_level import extract_text
-
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 

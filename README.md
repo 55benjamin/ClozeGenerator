@@ -4,9 +4,9 @@
 - [X] Implemented in python, in a project.py file
 - [X] Main function 
 - [X] 3 or more additional functions 
-- [ ] 3 or more tests, executable with pytest in a test_project.py file
-- [ ] tests must have same name as custom functions 
-- [ ] requirements.txt listing all pip-installable libraries
+- [X] 3 or more tests, executable with pytest in a test_project.py file
+- [X] tests must have same name as custom functions 
+- [X] requirements.txt listing all pip-installable libraries
 
 ## CS50P Video Requirements 
 - [ ] Project Title
