@@ -8,6 +8,7 @@ from os.path import splitext
 from pdfminer.high_level import extract_text
 from docx import Document
 from docx.shared import Pt
+from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 
 
@@ -266,6 +267,10 @@ def generate_to_docx(content):
     # set double line spacing 
     questions_paragraph.paragraph_format.line_spacing = 2.0  
     answers_paragraph.paragraph_format.line_spacing = 2.0  
+
+    # set justified text
+    questions_paragraph.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+    answers_paragraph.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
 
     # save the documents 
     questions.save('questions.docx')
