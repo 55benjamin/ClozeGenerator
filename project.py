@@ -61,7 +61,7 @@ def main(stdscr):
 Disclosure: The following functions prefixed with 'get' rely on python's 'curses' module. 
 In arriving at the decision to use this module and in understanding some of the functions and attributes in this module, 
 I probed ChatGPT based on my objectives and requirements. I did not copy code from it verbatim and only referred to it, in tandem with 
-the official 'curses' documentation (https://docs.python.org/3/library/curses.html#), when I ran into errors or needed clarification on 
+the official 'curses' documentation (https://docs.python.org/3/library/curses.html#), to better understand an error or to narrow down on 
 its documentation. The prompts that I used are viewable below:
 
 Clickable Python Terminal: Curses: https://chat.openai.com/share/eaa46c49-4c74-423f-9bbc-5d0d95eb6f17
@@ -240,7 +240,7 @@ def get_title(stdscr):
     
 def get_limit(stdscr):
     # limit is blank by default
-    limit = '' 
+    limit = None
 
     # clear out the terminal 
     stdscr.clear()
@@ -380,8 +380,6 @@ def replace(content, limit):
             
     # call natural language processing object on str of text
     doc = nlp(content)
-
-    
 
     for sent in list(doc.sents)[:limit]:
         # remove newlines from the end of sentence 
