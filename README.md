@@ -15,12 +15,12 @@ The comprehension cloze aims to test students on:
 Creating a comprehension cloze is often tedious and mechanical. Typically, the steps involve: 
 1. Finding an appropriate extract
 2. Copying the extract into a word document
-3. Reading each sentence
-4. Categorising and picking out words to assess students on (such as prepositions or phrasal verbs)
-5. Replacing the words with blanks
-6. Numbering the blanks
-7. Totaling the total number of blanks/marks
-8. Vetting the passage to ensure there are an even distribution of blanks
+3. Categorising and picking out words to assess students on (such as prepositions or phrasal verbs)
+4. Replacing the words with blanks
+5. Numbering the blanks
+6. Totaling the total number of blanks/marks
+7. Vetting the passage to ensure there are an even distribution of blanks and question types
+8. Formatting the document
 9. Exporting the comprehension cloze
 10. Creating an answer sheet (answers and explanations)
 
