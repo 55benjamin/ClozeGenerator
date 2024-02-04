@@ -2,7 +2,7 @@
 # CS50P Capstone|Cloze Generator
 
 ## Demo
-View the demo [here]()!
+View the YouTube demo [here](https://youtu.be/DIUQ0CgL8hw)!
 
 ## The problem
 A [comprehension cloze](http://tinyurl.com/CompreClozeExample) is an exercise whereby students, typically of the primary-school age (7 to 12 years old), are tasked with filling in blanks in an extract. 
@@ -47,21 +47,3 @@ Cloze Generator aims to condense and automate the steps above, such that cloze p
 
 
 This will start an interactive terminal which will take you through the steps to use the Cloze Generator. 
-
-
-## CS50P Video Requirements 
-- [ ] Project Title
-- [ ] Name
-- [ ] GitHub and edX usernames 
-- [ ] City and country
-- [ ] Date video was recorded
-- [ ] Submit https://forms.cs50.io/5e2dd8e8-3c8b-4eb2-b77d-085836253f26
-
-
-## CS50P README Requirements
-- [ ] Include the project title 
-- [ ] Include YouTube video (<3 mins)
-- [ ] Outline of project 
-- [ ] What files contain 
-- [ ] Choices debated on 
-- [ ] ~500 words

@@ -77,7 +77,7 @@ def get_mode(stdscr):
     curses.curs_set(0)
 
     # add title text 
-    stdscr.addstr(0, 1, "Cloze Generator. Updated Jan 2023")
+    stdscr.addstr(0, 1, "Cloze Generator. Updated Jan 2024")
     stdscr.addstr(1, 1, "https://github.com/55benjamin/ClozeGenerator")
     stdscr.refresh()
 
